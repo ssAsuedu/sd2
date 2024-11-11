@@ -1,0 +1,10 @@
+{
+    "name": Buyer Example
+    "id": 1234
+    "password": password123
+}
+{
+    "name": Jane Doe
+    "id": 5678
+    "password": password456
+}

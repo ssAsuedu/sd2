@@ -1,0 +1,6 @@
+{
+Title: Example 2
+Category: History
+Price: 45.99
+Condition: Used
+}

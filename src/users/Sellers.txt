@@ -1,0 +1,5 @@
+{
+    "name": Seller Example
+    "id": seller1
+    "password": password123
+}

@@ -1,0 +1,59 @@
+.textfield {
+         -fx-min-width: 115;
+         -fx-min-height: 30;
+         -fx-background-color: #f2f2f2;
+         -fx-border-color: #333;
+         -fx-border-radius: 4px;/* Dark gray border */
+         -fx-border-width: 0px;
+         -fx-border-radius: 5px;
+         -fx-padding: 8px 12px;
+         -fx-font-size: 14px;
+         -fx-font-family: "Roboto", sans-serif;
+
+            /* Hover effect */
+         /*-fx-effect: dropshadow(gaussian, #000, 2, 2, 0, 0); /* Add a slight shadow on hover */
+         -fx-border-color: #007bff; /* Blue border on hover */
+
+
+}
+.textfield:hover {
+    -fx-border-color: #999;
+}
+.textfield:focused {
+    -fx-border-color: #007bff;
+    -fx-border-width: 0 0 2px 0;
+
+}
+.logo{
+    -fx-border-width: 5.0;
+    -fx-border-insets: 3;
+    -fx-border-radius: 7;
+
+}
+
+.submit{
+    -fx-min-width: 80;
+    -fx-min-height: 30;
+
+    -fx-background-color: #007bff;
+
+    -fx-text-fill: white;
+
+}
+.title{
+    -fx-font-size: 28px;
+
+    -fx-font-family: "Helvetica";
+    -fx-text-fill: #007bff;
+
+}
+.errorbox{
+    -fx-background-color: #FFEBEE;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: #EF5350;
+}
+.error{
+    -fx-font-size: 16px;
+    -fx-text-fill: #F44336;
+
+}
