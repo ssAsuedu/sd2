@@ -4,3 +4,27 @@ Category: History
 Price: 45.99
 Condition: Used
 }
+{
+Title: Example TextBook
+Category: Natural Science
+Price: 95.99
+Condition: Used - Like New
+}
+{
+Title: Example TextBook
+Category: Natural Science
+Price: 95.99
+Condition: Used - Like New
+}
+{
+Title: Example TextBook
+Category: Natural Science
+Price: 95.99
+Condition: Used - Like New
+}
+{
+Title: Example TextBook
+Category: Natural Science
+Price: 95.99
+Condition: Used - Like New
+}

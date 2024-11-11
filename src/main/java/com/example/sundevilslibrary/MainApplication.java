@@ -18,6 +18,9 @@ public class MainApplication extends Application {
     private final IntegerProperty loggedInAs = new SimpleIntegerProperty(-1);
     private final IntegerProperty loggedOutSeller= new SimpleIntegerProperty(-1);
     private final IntegerProperty loggedOutAdmin= new SimpleIntegerProperty(-1);
+    private IntegerProperty createAccountRequested = new SimpleIntegerProperty(0);
+    private StackPane root; // Make root a class-level variable
+
     public void start(Stage stage) throws IOException {
         // load data from text files to initialize buyers. sellers, and admins
         String url = "src/users/Buyers.txt";
@@ -39,6 +42,29 @@ public class MainApplication extends Application {
         stage.setScene(scene);
         // binds loggedInAs variable to loginPane's variable, allows main to detect when to switch scenes
         loggedInAs.bind(loginPane.getLoggedInAs());
+
+
+        // Bind createAccountRequested variable to loginPane's variable
+        createAccountRequested.bind(loginPane.getCreateAccountRequested());
+        // Listener for createAccountRequested
+        createAccountRequested.addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() == 1) {
+                // navigate to CreateAccountPane
+                CreateAccountPane createAccountPane = new CreateAccountPane(() -> {
+                    // On back to log in, replace CreateAccountPane with new LoginPane
+                    LoginPane newLoginPane = new LoginPane(LoadBuyers.getBuyers(), LoadAdmins.getAdmins(), LoadSellers.getSellers());
+                    root.getChildren().clear();
+                    root.getChildren().add(newLoginPane);
+                    stage.setTitle("Login");
+                    loggedInAs.bind(newLoginPane.getLoggedInAs());
+                    // Re-bind createAccountRequested to new LoginPane
+                    createAccountRequested.bind(newLoginPane.getCreateAccountRequested());
+                });
+                root.getChildren().clear();
+                root.getChildren().add(createAccountPane);
+                stage.setTitle("Create Account");
+            }
+        });
 
         // listener event awaits change in loggedInAs variable, switches scenes accordingly
         loggedInAs.addListener((observable, oldValue, newValue) -> {
@@ -91,34 +117,37 @@ public class MainApplication extends Application {
 
         loggedOutBuyer.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() == 1) {
-                root.getChildren().remove(loginPane);
+                root.getChildren().clear();
                 LoginPane loginPane2 = new LoginPane(LoadBuyers.getBuyers(), LoadAdmins.getAdmins(), LoadSellers.getSellers());
                 root.getChildren().add(loginPane2);
                 stage.setTitle("Login");
                 stage.setScene(scene);
                 loggedInAs.bind(loginPane2.getLoggedInAs());
+                createAccountRequested.bind(loginPane2.getCreateAccountRequested());
             }
 
         });
         loggedOutSeller.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() == 1) {
-                root.getChildren().remove(loginPane);
+                root.getChildren().clear();
                 LoginPane loginPane2 = new LoginPane(LoadBuyers.getBuyers(), LoadAdmins.getAdmins(), LoadSellers.getSellers());
                 root.getChildren().add(loginPane2);
                 stage.setTitle("Login");
                 stage.setScene(scene);
                 loggedInAs.bind(loginPane2.getLoggedInAs());
+                createAccountRequested.bind(loginPane2.getCreateAccountRequested());
             }
 
         });
         loggedOutAdmin.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() == 1) {
-                root.getChildren().remove(loginPane);
+                root.getChildren().clear();
                 LoginPane loginPane2 = new LoginPane(LoadBuyers.getBuyers(), LoadAdmins.getAdmins(), LoadSellers.getSellers());
                 root.getChildren().add(loginPane2);
                 stage.setTitle("Login");
                 stage.setScene(scene);
                 loggedInAs.bind(loginPane2.getLoggedInAs());
+                createAccountRequested.bind(loginPane2.getCreateAccountRequested());
             }
 
         });

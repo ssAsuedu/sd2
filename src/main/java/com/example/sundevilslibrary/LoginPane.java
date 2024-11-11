@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 public class LoginPane extends HBox {
     private IntegerProperty loggedInAs = new SimpleIntegerProperty(0);
+    private IntegerProperty createAccountRequested = new SimpleIntegerProperty(0);
 
     // Initialize variables for show/hide password functionality
     PasswordField passwordField = new PasswordField();
@@ -167,6 +168,7 @@ public class LoginPane extends HBox {
 
 
 
+
         // defines login functionality, shows error msg for failed login
         submitButton.setOnAction(event -> {
             // Collect user input
@@ -188,9 +190,30 @@ public class LoginPane extends HBox {
 
         });
         vbox.getChildren().add(submitButton);
+
+        // "OR" label between the two buttons
+        Label orLabel = new Label("OR");
+        orLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 14));
+        orLabel.setAlignment(Pos.CENTER); // Center the label text within its container
+        vbox.getChildren().add(orLabel);
+        vbox.setMargin(orLabel, new Insets(10, 0, 10, 0));
+
+        // Create and add "Create New Account" button
+        Button createAccountButton = new Button("Create New Account");
+        createAccountButton.getStyleClass().add("create-account-button");
+        createAccountButton.setStyle("-fx-font-size: 16;");
+        vbox.getChildren().add(createAccountButton);
+        vbox.setMargin(createAccountButton, new Insets(0, 10, 0, 10));
+        createAccountButton.getStyleClass().add("submit");
+        // Set action for create account button
+        createAccountButton.setOnAction(event -> {
+            createAccountRequested.set(1);
+        });
+
         this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(vbox);
-    }
+
+    } //end constructor
     public int HandleLogin(ArrayList<Buyer> buyers,ArrayList<Seller> sellers,ArrayList<Admin> admins, String username, String password){
         // loops through buyers, sellers, and admins, returns 1 if buyer , 2 for seller, 3 for admin, -1 for failed login
         for (Buyer buyer : buyers) {
@@ -216,26 +239,25 @@ public class LoginPane extends HBox {
     public ObservableValue<? extends Number> getLoggedInAs() {
         return loggedInAs;
     }
-    // handles event that show password is toggled
-    EventHandler<ActionEvent> event = new EventHandler<ActionEvent>(){
+    // Getter for createAccountRequested
+    public ObservableValue<? extends Number> getCreateAccountRequested() {
+        return createAccountRequested;
+    }
 
-        public void handle(ActionEvent e){
-            if (showpass.isSelected()){
+    // Handles event that show password is toggled
+    EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent e) {
+            if (showpass.isSelected()) {
                 String pass = passwordField.getText();
                 psdField.setText(pass);
                 passwordField.setVisible(false);
                 psdField.setVisible(true);
                 selImgView.setVisible(true);
                 unImgView.setVisible(false);
-                psdField.textProperty().addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<?
-                            extends String> observable, String oldValue, String newValue)
-                    {
-                        // Handle text changes here
-                        passwordField.setText(newValue);
-                        System.out.println("New text: " + newValue);
-                    }
+                psdField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    // Handle text changes here
+                    passwordField.setText(newValue);
+                    System.out.println("New text: " + newValue);
                 });
 
             } else {
