@@ -1,10 +1,4 @@
 {
-Title: Example TextBook
-Category: Natural Science
-Price: 95.99
-Condition: Used - Like New
-}
-{
 Title: Example 2
 Category: English Language
 Price: 45.99
@@ -15,4 +9,10 @@ Title: Seller Test
 Category: Natural Science
 Price: 7.79
 Condition: Used
+}
+{
+Title: Divergent
+Category: Other
+Price: $20.99
+Condition: Used - Like New
 }
