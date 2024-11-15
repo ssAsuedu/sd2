@@ -1,10 +1,35 @@
 {
-    "name": Buyer Example
-    "id": 1234
-    "password": password123
+    "name": Kyler Murray
+    "id": kmurr1
+    "password": cardinals
 }
 {
-    "name": Jane Doe
-    "id": 5678
-    "password": password456
+name: Gon Freecs
+id: gfreec2
+password: nen
+}
+{
+name: Mike McDaniels
+id: mMcD
+password: cheetah
+}
+{
+name: Tom Hanks
+id: thank2
+password: thankful7
+}
+{
+name: Paul Atreides
+id: Patreides5
+password: lisanalgaib
+}
+{
+name: Kendrick Lamar
+id: klamar
+password: kungfukenny
+}
+{
+name: Taylor Swift
+id: tswift
+password: travis
 }

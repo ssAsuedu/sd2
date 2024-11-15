@@ -39,7 +39,8 @@ public class LoadBooks {
                                 keyValuePair = line.split(":");
                                 conditionData = keyValuePair[1].trim();
                                 if (titleData != "" && priceData != "" && categoryData != "" && conditionData != "") {
-                                    Book book = new Book(titleData, categoryData, conditionData,Double.parseDouble(priceData));
+                                    //was getting an error here regarding taking the whole string instead of just the float value, trims the "$"
+                                    Book book = new Book(titleData, categoryData, conditionData,Double.parseDouble(priceData.replace("$", "").trim()));
                                     books.add(book);
                                     titleData = "";
                                     categoryData = "";

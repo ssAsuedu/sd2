@@ -1,5 +1,30 @@
 {
-    "name": Seller Example
-    "id": seller1
-    "password": password123
+name: Seller Example
+id: seller1
+password: password123
+}
+{
+name: Devin Booker
+id: dbook1
+password: sunsin4
+}
+{
+name: killua zoldic
+id: kzoldic
+password: yoyo
+}
+{
+name: Daniel Larson
+id: larson3
+password: gracevanderwall
+}
+{
+name: J cole
+id: jcole3
+password: loveyourz
+}
+{
+name: Travis Scott
+id: tscott5
+password: autotune
 }
