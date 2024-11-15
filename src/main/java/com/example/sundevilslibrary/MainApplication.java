@@ -61,9 +61,7 @@ public class MainApplication extends Application {
                     createAccountRequested.bind(newLoginPane.getCreateAccountRequested());
                 });
                 root.getChildren().clear();
-
                createAccountPane.getStylesheets().add(getClass().getResource("/styles/createAcct.css").toExternalForm());
-
                 root.getChildren().add(createAccountPane);
                 stage.setTitle("Create Account");
             }

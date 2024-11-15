@@ -4,7 +4,6 @@
     "password": cardinals
 }
 {
-<<<<<<< HEAD
 name: Gon Freecs
 id: gfreec2
 password: nen
@@ -33,34 +32,4 @@ password: kungfukenny
 name: Taylor Swift
 id: tswift
 password: travis
-=======
-    "name": Gon Freecs
-    "id": gfreec2
-    "password": nen
-}
-{
-    "name": Mike McDaniels
-    "id": mMcD
-    "password": cheetah
-}
-{
-    "name": Tom Hanks
-    "id": thank2
-    "password": thankful7
-}
-{
-    "name": Paul Atreides
-    "id": Patreides5
-    "password": lisanalgaib
-}
-{
-    "name": Kendrick Lamar
-    "id": klamar
-    "password": kungfukenny
-}
-{
-    "name": Taylor Swift
-    "id": tswift
-    "password": travis
->>>>>>> remotes/origin/main
 }

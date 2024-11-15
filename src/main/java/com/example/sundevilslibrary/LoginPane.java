@@ -202,13 +202,9 @@ public class LoginPane extends HBox {
         Button createAccountButton = new Button("Create New Account");
         createAccountButton.getStyleClass().add("create-account-button");
         createAccountButton.setStyle("-fx-font-size: 16;");
-<<<<<<< HEAD
         createAccountButton.setMaxWidth(200);
         vbox.getChildren().add(createAccountButton);
 
-=======
-        vbox.getChildren().add(createAccountButton);
->>>>>>> remotes/origin/main
         vbox.setMargin(createAccountButton, new Insets(0, 10, 0, 10));
         createAccountButton.getStyleClass().add("submit");
         // Set action for create account button

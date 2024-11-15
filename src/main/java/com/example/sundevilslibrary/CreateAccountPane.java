@@ -5,10 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-<<<<<<< HEAD
 import javafx.scene.text.FontPosture;
-=======
->>>>>>> remotes/origin/main
 import javafx.scene.text.FontWeight;
 
 import java.io.BufferedWriter;
@@ -36,10 +33,7 @@ public class CreateAccountPane extends VBox {
         // Label
         Label titleLabel = new Label("Create a New Account");
         titleLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 32));
-<<<<<<< HEAD
         titleLabel.getStyleClass().add("title");
-=======
->>>>>>> remotes/origin/main
         this.getChildren().add(titleLabel);
 
         // Name Field
@@ -48,33 +42,21 @@ public class CreateAccountPane extends VBox {
         VBox nameBox = new VBox(5, nameLabel, nameField);
         nameBox.setAlignment(Pos.CENTER_LEFT);
         nameBox.setMaxWidth(400);
-<<<<<<< HEAD
         nameField.getStyleClass().add("textfield");
-=======
-
->>>>>>> remotes/origin/main
         // ID Field
         Label idLabel = new Label("ASURITE ID:");
         TextField idField = new TextField();
         VBox idBox = new VBox(5, idLabel, idField);
         idBox.setAlignment(Pos.CENTER_LEFT);
         idBox.setMaxWidth(400);
-<<<<<<< HEAD
         idField.getStyleClass().add("textfield");
-=======
-
->>>>>>> remotes/origin/main
         // password field
         Label passwordLabel = new Label("Password:");
         PasswordField passwordField = new PasswordField();
         VBox passwordBox = new VBox(5, passwordLabel, passwordField);
         passwordBox.setAlignment(Pos.CENTER_LEFT);
         passwordBox.setMaxWidth(400);
-<<<<<<< HEAD
         passwordField.getStyleClass().add("textfield");
-=======
-
->>>>>>> remotes/origin/main
         // Account Type Selection
         Label accountTypeLabel = new Label("Account Type:");
         ToggleGroup accountTypeGroup = new ToggleGroup();
@@ -92,11 +74,7 @@ public class CreateAccountPane extends VBox {
         // submit Button
         Button submitButton = new Button("Create Account");
         submitButton.setMaxWidth(200);
-<<<<<<< HEAD
         submitButton.getStyleClass().add("submit");
-=======
-
->>>>>>> remotes/origin/main
         // success message
         Label successLabel = new Label("Successfully created a new account!");
         successLabel.setVisible(false);
