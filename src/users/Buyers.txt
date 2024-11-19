@@ -33,3 +33,13 @@ name: Taylor Swift
 id: tswift
 password: travis
 }
+{
+    "name": Noah Lyles
+    "id": nlyles2
+    "password": fast
+}
+{
+name: James Guy
+id: jguy
+password: hello1
+}

@@ -16,3 +16,9 @@ Category: Other
 Price: $20.99
 Condition: Used - Like New
 }
+{
+Title: Magic Tree House
+Category: Other
+Price: $13.59
+Condition: New
+}

@@ -1,3 +1,5 @@
+//This class represents the JavaFX pane that handles users creating new accounts
+//New users can only create new Buyer and Seller Accounts
 package com.example.sundevilslibrary;
 //import necessary packages
 import javafx.geometry.Insets;
@@ -5,10 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -27,10 +26,7 @@ public class CreateAccountPane extends VBox {
         this.setPadding(new Insets(20));
         this.setSpacing(15);
 
-        //On the agenda: update the styles of these components
-        //It is very basic, but I'm not sure what designs we want yet
-
-        // Label
+        // Top Label
         Label titleLabel = new Label("Create a New Account");
         titleLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 32));
         titleLabel.getStyleClass().add("title");
@@ -39,24 +35,27 @@ public class CreateAccountPane extends VBox {
         // Name Field
         Label nameLabel = new Label("Full Name:");
         TextField nameField = new TextField();
+        nameField.getStyleClass().add("textfield");
         VBox nameBox = new VBox(5, nameLabel, nameField);
         nameBox.setAlignment(Pos.CENTER_LEFT);
         nameBox.setMaxWidth(400);
-        nameField.getStyleClass().add("textfield");
+
         // ID Field
         Label idLabel = new Label("ASURITE ID:");
         TextField idField = new TextField();
+        idField.getStyleClass().add("textfield");
         VBox idBox = new VBox(5, idLabel, idField);
         idBox.setAlignment(Pos.CENTER_LEFT);
         idBox.setMaxWidth(400);
-        idField.getStyleClass().add("textfield");
+
         // password field
         Label passwordLabel = new Label("Password:");
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("textfield");
         VBox passwordBox = new VBox(5, passwordLabel, passwordField);
         passwordBox.setAlignment(Pos.CENTER_LEFT);
         passwordBox.setMaxWidth(400);
-        passwordField.getStyleClass().add("textfield");
+
         // Account Type Selection
         Label accountTypeLabel = new Label("Account Type:");
         ToggleGroup accountTypeGroup = new ToggleGroup();
@@ -75,13 +74,15 @@ public class CreateAccountPane extends VBox {
         Button submitButton = new Button("Create Account");
         submitButton.setMaxWidth(200);
         submitButton.getStyleClass().add("submit");
+
         // success message
         Label successLabel = new Label("Successfully created a new account!");
         successLabel.setVisible(false);
         Button backToLoginButton = new Button("Back to Login");
         backToLoginButton.setVisible(false);
+        backToLoginButton.getStyleClass().add("submit");
 
-        // Add components
+        // Add components to this pane
         this.getChildren().addAll(nameBox, idBox, passwordBox, accountTypeVBox, submitButton, successLabel, backToLoginButton);
 
         // submit button handler
@@ -97,7 +98,8 @@ public class CreateAccountPane extends VBox {
                 return;
             }
 
-            try {
+            //UPDATING files and re-loading the data from the files
+            try { //I was getting a logic error with this but I think it is good now
                 if (accountType.equals("Buyer")) {
                     saveBuyerToFile(name, id, password);
                     LoadBuyers.readBuyersFromFile("src/users/Buyers.txt"); //we need to re-load the data since we are adding to it
@@ -125,23 +127,33 @@ public class CreateAccountPane extends VBox {
     //But I think it works
     private void saveSellerToFile(String name, String id, String password) throws IOException {
         String filepath = "src/users/Sellers.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, true))) {
-            writer.write("{\n");
-            writer.write("    \"name\": " + name + "\n");
-            writer.write("    \"id\": " + id + "\n");
-            writer.write("    \"password\": " + password + "\n");
-            writer.write("}\n");
+        try{
+            FileWriter fw = new FileWriter(filepath, true);
+
+            String newText = "{" + "\n" + "name: " + name + "\n" + "id: " + id + "\n" + "password: " + password + "\n" + "}\n" ;
+            fw.write(newText);
+
+            fw.close();
+
+            System.out.println("Completed seller creation. ");
+        } catch (IOException error) {
+            System.out.println("Failed to open file Sellers.txt");
         }
     }
 
     private void saveBuyerToFile(String name, String id, String password) throws IOException {
         String filepath = "src/users/Buyers.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, true))) {
-            writer.write("{\n");
-            writer.write("    \"name\": " + name + "\n");
-            writer.write("    \"id\": " + id + "\n");
-            writer.write("    \"password\": " + password + "\n");
-            writer.write("}\n");
+        try{
+            FileWriter fw = new FileWriter(filepath, true);
+
+            String newText = "{" + "\n" + "name: " + name + "\n" + "id: " + id + "\n" + "password: " + password + "\n" + "}\n" ;
+            fw.write(newText);
+
+            fw.close();
+
+            System.out.println("Completed buyer creation. ");
+        } catch (IOException error) {
+            System.out.println("Failed to open file Buyers.txt");
         }
     }
 
@@ -154,4 +166,3 @@ public class CreateAccountPane extends VBox {
         alert.showAndWait();
     }
 }
-

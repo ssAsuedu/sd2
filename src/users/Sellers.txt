@@ -28,3 +28,13 @@ name: Travis Scott
 id: tscott5
 password: autotune
 }
+{
+    "name": Usain Bolt
+    "id": ubolt
+    "password": quick
+}
+{
+name: Tony Tiger
+id: ttiger3
+password: flakes
+}
