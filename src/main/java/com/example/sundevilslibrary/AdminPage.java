@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,6 +63,11 @@ public class AdminPage extends HBox{ // extends Parent
         buttonBox.getChildren().addAll(button1, button2, button3, button4);
         buttonBox.setAlignment(Pos.CENTER);
         vbox.getChildren().add(buttonBox);
+
+        button2.setOnAction(event -> {
+            MonitorActivity((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
+        });
+
 
         Button logOut = new Button("Log Out");
         logOut.getStyleClass().add("submit");
@@ -561,5 +568,198 @@ public class AdminPage extends HBox{ // extends Parent
         return userItem;
 
     };
+
+
+
+
+
+
+
+    public void MonitorActivity(VBox logoutBox, VBox menuBox){
+
+
+        this.getChildren().removeAll(this.getChildren().get(0), this.getChildren().get(1));
+
+
+        VBox goBackBox = new VBox(30);
+        Button goBackButton = new Button("Go Back");
+        goBackButton.getStyleClass().add("submit");
+        goBackButton.setOnAction(event-> {
+            this.getChildren().clear();
+            this.getChildren().addAll(logoutBox, menuBox);
+            this.setAlignment(Pos.TOP_CENTER);
+        });
+
+
+        goBackBox.getChildren().add(goBackButton);
+        goBackBox.setAlignment(Pos.TOP_LEFT);
+        goBackBox.setPadding(new Insets(30));
+
+
+        this.getChildren().add(goBackBox);
+        VBox activityBox = new VBox(30);
+        ArrayList <Book> SoldBooks = new ArrayList<Book>();
+        String filepath = "src/bookDatabase/SoldBooks.txt";
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            String titleData = "";
+            String categoryData = "";
+            String conditionData = "";
+            String priceData = "";
+            // loops through each object in text file and adds to array list
+
+
+
+
+            while ((line = reader.readLine()) != null) {
+
+
+
+
+                if (line.contains("Title")) {
+                    String[] keyValuePair = line.split(":");
+                    titleData = keyValuePair[1].trim();
+                    line = reader.readLine();
+                    if (line.contains("Category")) {
+                        keyValuePair = line.split(":");
+                        categoryData = keyValuePair[1].trim();
+                        line = reader.readLine();
+                        if (line.contains("Price")) {
+                            keyValuePair = line.split(":");
+                            priceData = keyValuePair[1].trim();
+                            line = reader.readLine();
+                            if (line.contains("Condition")) {
+                                keyValuePair = line.split(":");
+                                conditionData = keyValuePair[1].trim();
+                                if (titleData != "" && priceData != "" && categoryData != "" && conditionData != "") {
+                                    //was getting an error here regarding taking the whole string instead of just the float value, trims the "$"
+                                    Book book = new Book(titleData, categoryData, conditionData,Double.parseDouble(priceData.replace("$", "").trim()));
+                                    SoldBooks.add(book);
+                                    titleData = "";
+                                    categoryData = "";
+                                    conditionData = "";
+                                    priceData = "";
+
+
+
+
+                                }
+                            }
+
+
+
+
+                        }
+                    }
+
+
+                    continue;
+                }
+
+
+
+
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        if (SoldBooks.size()==0){
+            activityBox.getChildren().add(new Label("There is no transaction history."));
+        }
+
+
+
+
+        final int ITEMS_PER_PAGE = 5;
+        int totalPages = (int) Math.ceil((double) SoldBooks.size() / ITEMS_PER_PAGE);
+
+
+        // Create Pagination control
+        Pagination pagination = new Pagination(totalPages);
+        pagination.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                VBox pageContent = new VBox(10);
+
+
+                int startIndex = pageIndex * ITEMS_PER_PAGE;
+                int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, SoldBooks.size());
+
+
+                // Add buyer information for current page
+                for (int i = startIndex; i < endIndex; i++) {
+                    Book book = SoldBooks.get(i);
+                    HBox userItem = createBookItem(book);
+                    pageContent.getChildren().add(userItem);
+                }
+
+
+                return pageContent;
+            }
+        });
+        activityBox.getChildren().add(pagination);
+
+
+
+
+        VBox parentBox = new VBox(30);
+        Label titleLabel = new Label("Monitor Activity - Recently Added Books");
+        titleLabel.getStyleClass().add("title");
+        parentBox.getChildren().addAll(titleLabel, activityBox);
+        parentBox.setAlignment(Pos.TOP_CENTER);
+        parentBox.setPadding(new Insets(30));
+        this.getChildren().add(parentBox);
+
+
+
+
+
+
+
+
+
+
+    }
+    public HBox createBookItem(Book book){
+        HBox bookItem = new HBox(140);
+        VBox leftPane = new VBox(20);
+        VBox rightPane = new VBox(20);
+
+
+
+
+        Label title = new Label(book.getTitle());
+        Label condition = new Label(book.getCondition());
+        Label category = new Label(book.getCategory());
+        Label price = new Label("$" + book.getPrice().toString());
+
+
+
+
+        leftPane.getChildren().addAll(title, condition, category);
+
+
+
+
+        rightPane.getChildren().addAll(price);
+
+
+
+
+        leftPane.setAlignment(Pos.CENTER_LEFT);
+        rightPane.setAlignment(Pos.CENTER_RIGHT);
+        rightPane.prefWidthProperty().bind(leftPane.prefWidthProperty());
+        bookItem.setAlignment(Pos.CENTER);
+        bookItem.getChildren().addAll(leftPane, rightPane);
+        bookItem.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        bookItem.setPadding(new Insets(10,0,10,0));
+
+
+
+
+        bookItem.getStyleClass().add("userCard");
+        return bookItem;
+    }
+
 
 }
