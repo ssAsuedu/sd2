@@ -1,5 +1,6 @@
 package com.example.sundevilslibrary;
 
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -67,6 +68,11 @@ public class AdminPage extends HBox{ // extends Parent
         button2.setOnAction(event -> {
             MonitorActivity((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
         });
+
+        button4.setOnAction(event -> {
+            ModifyPriceCalculator((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
+        });
+
 
 
         Button logOut = new Button("Log Out");
@@ -760,6 +766,167 @@ public class AdminPage extends HBox{ // extends Parent
         bookItem.getStyleClass().add("userCard");
         return bookItem;
     }
+    public void ModifyPriceCalculator(VBox logoutBox, VBox menuBox){
+        this.getChildren().removeAll(this.getChildren().get(0), this.getChildren().get(1));
+
+
+        VBox goBackBox = new VBox(30);
+        Button goBackButton = new Button("Go Back");
+        goBackButton.getStyleClass().add("submit");
+        goBackButton.setOnAction(event-> {
+            this.getChildren().clear();
+            this.getChildren().addAll(logoutBox, menuBox);
+            this.setAlignment(Pos.TOP_CENTER);
+        });
+
+
+        goBackBox.getChildren().add(goBackButton);
+        goBackBox.setAlignment(Pos.TOP_LEFT);
+        goBackBox.setPadding(new Insets(30));
+
+
+        this.getChildren().add(goBackBox);
+
+
+        VBox modifyFormBox = new VBox(30);
+        Label titleLabel = new Label ("Modify Price Calculator");
+        titleLabel.getStyleClass().add("title");
+        modifyFormBox.getChildren().add(titleLabel);
+
+
+        VBox textfieldsBox = new VBox(30);
+        Label usdnewLabel = new Label("Used - Like New");
+        TextField usedLikeNew = new TextField();
+        Label goodLabel = new Label("Good");
+        TextField good = new TextField();
+        Label moderateLabel = new Label("Moderate");
+        TextField moderate = new TextField();
+        Label poorLabel = new Label("Poor");
+        TextField poor = new TextField();
+
+
+
+
+        textfieldsBox.getChildren().addAll(usdnewLabel, usedLikeNew, goodLabel, good, moderateLabel, moderate, poorLabel, poor);
+
+
+
+
+        usedLikeNew.getStyleClass().add("textfield");
+        good.getStyleClass().add("textfield");
+        moderate.getStyleClass().add("textfield");
+        poor.getStyleClass().add("textfield");
+        // make the textfields only accept numbers:
+        usedLikeNew.textProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                try {
+                    // Attempt to parse the input as a double
+                    Double.parseDouble(newValue);
+                    // If parsing is successful, the input is valid
+                } catch (NumberFormatException e) {
+                    // If parsing fails, remove invalid characters
+                    usedLikeNew.setText(newValue.replaceAll("[^\\d.]", ""));
+                }
+            });
+        });
+        good.textProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                try {
+                    // Attempt to parse the input as a double
+                    Double.parseDouble(newValue);
+                    // If parsing is successful, the input is valid
+                } catch (NumberFormatException e) {
+                    // If parsing fails, remove invalid characters
+                    good.setText(newValue.replaceAll("[^\\d.]", ""));
+                }
+            });
+        });
+        moderate.textProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                try {
+                    // Attempt to parse the input as a double
+                    Double.parseDouble(newValue);
+                    // If parsing is successful, the input is valid
+                } catch (NumberFormatException e) {
+                    // If parsing fails, remove invalid characters
+                    moderate.setText(newValue.replaceAll("[^\\d.]", ""));
+                }
+            });
+        });
+        poor.textProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                try {
+                    // Attempt to parse the input as a double
+                    Double.parseDouble(newValue);
+                    // If parsing is successful, the input is valid
+                } catch (NumberFormatException e) {
+                    // If parsing fails, remove invalid characters
+                    poor.setText(newValue.replaceAll("[^\\d.]", ""));
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+        textfieldsBox.setAlignment(Pos.CENTER_LEFT);
+        textfieldsBox.setPadding(new Insets(30));
+
+
+
+
+        Button submitForm = new Button("Save Changes");
+        submitForm.getStyleClass().add("submit");
+
+
+
+
+        modifyFormBox.getChildren().addAll(textfieldsBox, submitForm);
+        modifyFormBox.setAlignment(Pos.TOP_CENTER);
+        modifyFormBox.setPadding(new Insets(30));
+        // adds the new formBox to the screen
+        this.getChildren().add(modifyFormBox);
+
+
+        submitForm.setOnAction(event -> {
+           // get whatever new values the user entered
+            String newUsed = usedLikeNew.getText();
+            String newGood = good.getText();
+            String newModerate = moderate.getText();
+            String newPoor = poor.getText();
+
+
+             // code opens the file you created and writes the new values
+            String filepath = "src/bookDatabase/PriceCalculator.txt";
+            try {
+                FileWriter fw = new FileWriter(filepath);
+                fw.write("Used - Like New: " + newUsed + "\n" + "Good: " + newGood + "\n" + "Moderate: " + newModerate + "\n" + "Poor: " + newPoor + "\n" );
+                fw.close();
+
+
+
+
+            } catch (IOException error) {
+                System.out.println("Failed to open file PriceCalculator.txt");
+            }
+
+
+            modifyFormBox.getChildren().clear();
+            modifyFormBox.getChildren().add( new Label("Successfully Changed Price Calculator!"));
+
+
+        });
+
+
+
+    }
+
 
 
 }
