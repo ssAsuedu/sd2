@@ -1,9 +1,4 @@
 {
-    "name": Kyler Murray
-    "id": kmurr1
-    "password": cardinals
-}
-{
 name: Gon Freecs
 id: gfreec2
 password: nen
@@ -34,12 +29,22 @@ id: tswift
 password: travis
 }
 {
-    "name": Noah Lyles
-    "id": nlyles2
-    "password": fast
-}
-{
 name: James Guy
 id: jguy
 password: hello1
+}
+{
+name: Joel Hudgens
+id: joeljoel
+password: 123
+}
+{
+name: Kevin Malone
+id: kmalone
+password: chilli
+}
+{
+name: test
+id: test
+password: test
 }

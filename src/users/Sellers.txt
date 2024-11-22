@@ -29,12 +29,12 @@ id: tscott5
 password: autotune
 }
 {
-    "name": Usain Bolt
-    "id": ubolt
-    "password": quick
-}
-{
 name: Tony Tiger
 id: ttiger3
 password: flakes
+}
+{
+name: test1
+id: test1
+password: test1
 }
