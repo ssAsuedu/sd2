@@ -11,9 +11,9 @@ Price: 95.99
 Condition: Used - Like New
 }
 {
-Title: Example TextBook
+Title: Example 4 TextBook
 Category: Natural Science
-Price: 95.99
+Price: 12.99
 Condition: Used - Like New
 }
 {
@@ -25,6 +25,12 @@ Condition: Used - Like New
 {
 Title: Example TextBook
 Category: Natural Science
-Price: 95.99
+Price: 35
+Condition: Used - Like New
+}
+{
+Title: Example TextBook
+Category: Natural Science
+Price: 120
 Condition: Used - Like New
 }

@@ -74,3 +74,4 @@
          -fx-border-color: #007bff; /* Blue border on hover */
 
 }
+.default-color0.chart-series-line { -fx-stroke: blue; }

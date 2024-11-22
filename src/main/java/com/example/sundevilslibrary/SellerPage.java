@@ -24,6 +24,8 @@ import javafx.scene.text.FontWeight;
 import javafx.util.converter.NumberStringConverter;
 
 import javax.security.auth.callback.ConfirmationCallback;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -159,19 +161,64 @@ public class SellerPage extends HBox { // extends Parent
     public Double generateListing(VBox vbox, String title, Double price, String condition, String category){
         this.getChildren().remove(vbox);
         VBox vbox2 = new VBox(20);
+        Double newMltpl = 0.0;
+        Double goodMltpl = 0.0;
+        Double modMltpl = 0.0;
+        Double poorMltpl = 0.0;
         Label confirmPurch = new Label("Confirm Your Listing");
         confirmPurch.getStyleClass().add("title");
         Label title1 = new Label("Title: \t" + title);
         title1.setStyle("-fx-font-size: 12pt;");
         DecimalFormat formatPrices = new DecimalFormat("#.##");
+        String filepath2 = "src/bookDatabase/PriceCalculator.txt";
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath2))) {
+            String newL = "";
+            String gd = "";
+            String md = "";
+            String pr = "";
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("Used - Like New")){
+                    String[] keyValuePair = line.split(":");
+                    newL = keyValuePair[1].trim();
+                    line = reader.readLine();
+                    if (line.contains("Good")){
+                        keyValuePair = line.split(":");
+                        gd = keyValuePair[1].trim();
+                        line = reader.readLine();
+                        if (line.contains("Moderate")){
+                            keyValuePair = line.split(":");
+                            md = keyValuePair[1].trim();
+                            if (line.contains("Poor")){
+                                keyValuePair = line.split(":");
+                                pr = keyValuePair[1].trim();
+                                if (!newL.equals("") && !gd.equals("") && !md.equals("") && !pr.equals("")){
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            newMltpl = Double.parseDouble(newL);
+            goodMltpl = Double.parseDouble(newL);
+            modMltpl = Double.parseDouble(newL);
+            poorMltpl = Double.parseDouble(newL);
+
+        } catch(IOException e){
+            System.out.println("Failed to read price data");
+            e.printStackTrace();
+        }
+
         if (condition.equals("Used - Like New")){
-            price *= 0.85;
+            price *= newMltpl;
         } else if (condition.equals("Good")){
-            price *= 0.7;
+            price *= goodMltpl;
         } else if (condition.equals("Moderate")) {
-            price *= 0.6;
+            price *= modMltpl;
         }else {
-            price *= 0.5;
+            price *= poorMltpl;
         }
 
         String prices = formatPrices.format(price);

@@ -25,6 +25,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 
 public class AdminPage extends HBox{ // extends Parent
     private IntegerProperty loggedOut = new SimpleIntegerProperty(0);
@@ -66,9 +70,19 @@ public class AdminPage extends HBox{ // extends Parent
         vbox.getChildren().add(buttonBox);
 
         button2.setOnAction(event -> {
-            MonitorActivity((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
+            try {
+                MonitorActivity((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
-
+        button3.setOnAction(event -> {
+            try {
+                GenerateStatistics((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         button4.setOnAction(event -> {
             ModifyPriceCalculator((VBox)this.getChildren().get(0),(VBox) this.getChildren().get(1));
         });
@@ -581,7 +595,7 @@ public class AdminPage extends HBox{ // extends Parent
 
 
 
-    public void MonitorActivity(VBox logoutBox, VBox menuBox){
+    public void MonitorActivity(VBox logoutBox, VBox menuBox) throws IOException {
 
 
         this.getChildren().removeAll(this.getChildren().get(0), this.getChildren().get(1));
@@ -604,71 +618,10 @@ public class AdminPage extends HBox{ // extends Parent
 
         this.getChildren().add(goBackBox);
         VBox activityBox = new VBox(30);
-        ArrayList <Book> SoldBooks = new ArrayList<Book>();
+
         String filepath = "src/bookDatabase/SoldBooks.txt";
-        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
-            String line;
-            String titleData = "";
-            String categoryData = "";
-            String conditionData = "";
-            String priceData = "";
-            // loops through each object in text file and adds to array list
+        ArrayList<Book> SoldBooks = LoadBooks.readBooksFromFile(filepath);
 
-
-
-
-            while ((line = reader.readLine()) != null) {
-
-
-
-
-                if (line.contains("Title")) {
-                    String[] keyValuePair = line.split(":");
-                    titleData = keyValuePair[1].trim();
-                    line = reader.readLine();
-                    if (line.contains("Category")) {
-                        keyValuePair = line.split(":");
-                        categoryData = keyValuePair[1].trim();
-                        line = reader.readLine();
-                        if (line.contains("Price")) {
-                            keyValuePair = line.split(":");
-                            priceData = keyValuePair[1].trim();
-                            line = reader.readLine();
-                            if (line.contains("Condition")) {
-                                keyValuePair = line.split(":");
-                                conditionData = keyValuePair[1].trim();
-                                if (titleData != "" && priceData != "" && categoryData != "" && conditionData != "") {
-                                    //was getting an error here regarding taking the whole string instead of just the float value, trims the "$"
-                                    Book book = new Book(titleData, categoryData, conditionData,Double.parseDouble(priceData.replace("$", "").trim()));
-                                    SoldBooks.add(book);
-                                    titleData = "";
-                                    categoryData = "";
-                                    conditionData = "";
-                                    priceData = "";
-
-
-
-
-                                }
-                            }
-
-
-
-
-                        }
-                    }
-
-
-                    continue;
-                }
-
-
-
-
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
         if (SoldBooks.size()==0){
             activityBox.getChildren().add(new Label("There is no transaction history."));
         }
@@ -709,7 +662,7 @@ public class AdminPage extends HBox{ // extends Parent
 
 
         VBox parentBox = new VBox(30);
-        Label titleLabel = new Label("Monitor Activity - Recently Added Books");
+        Label titleLabel = new Label("View Book Transaction History");
         titleLabel.getStyleClass().add("title");
         parentBox.getChildren().addAll(titleLabel, activityBox);
         parentBox.setAlignment(Pos.TOP_CENTER);
@@ -926,7 +879,152 @@ public class AdminPage extends HBox{ // extends Parent
 
 
     }
+    public void GenerateStatistics(VBox logoutBox, VBox menuBox) throws IOException {
+        this.getChildren().removeAll(this.getChildren().get(0), this.getChildren().get(1));
 
+
+        VBox goBackBox = new VBox(30);
+        Button goBackButton = new Button("Go Back");
+        goBackButton.getStyleClass().add("submit");
+        goBackButton.setOnAction(event-> {
+            this.getChildren().clear();
+            this.getChildren().addAll(logoutBox, menuBox);
+            this.setAlignment(Pos.TOP_CENTER);
+        });
+
+
+        goBackBox.getChildren().add(goBackButton);
+        goBackBox.setAlignment(Pos.TOP_LEFT);
+        goBackBox.setPadding(new Insets(30));
+
+
+        this.getChildren().add(goBackBox);
+
+        VBox parentBox = new VBox(20);
+        Label titleLabel = new Label("View The Library's Statistics");
+        titleLabel.getStyleClass().add("title");
+
+        String filepath = "src/bookDatabase/SoldBooks.txt";
+        ArrayList<Book> SoldBooks = LoadBooks.readBooksFromFile(filepath);
+
+        String filepath2 = "src/bookDatabase/SoldBooks.txt";
+        ArrayList<Book> books = LoadBooks.readBooksFromFile(filepath2);
+
+        VBox dashboard = new VBox (20);
+
+        HBox hbox1 = new HBox(40);
+        HBox hbox2 = new HBox(40);
+        HBox hbox3 = new HBox();
+
+        VBox netSales = new VBox(10);
+        VBox totalSold = new VBox(10);
+        VBox totalListed = new VBox(10);
+        VBox totalAdmins = new VBox(10);
+        VBox totalBuyers = new VBox(10);
+        VBox totalSellers = new VBox(10);
+
+        Double netSale = 0.00;
+        for (Book book: SoldBooks){
+            netSale += book.getPrice();
+        }
+        Label salesLabel = new Label("Total Revenue: ");
+        Label sales = new Label("$" + netSale.toString());
+        netSales.getChildren().addAll(salesLabel, sales);
+
+        Label soldLabel = new Label("Total Sold: ");
+        Label sold = new Label(String.valueOf(SoldBooks.size()));
+        totalSold.getChildren().addAll(soldLabel, sold);
+
+        Label listedLbl = new Label("Books Listed:");
+        Label listed = new Label(String.valueOf(books.size()));
+        totalListed.getChildren().addAll(listedLbl, listed);
+        listed.getStyleClass().add("title");
+
+
+        Label admLabel = new Label("Total Admins:");
+        Label adm = new Label(String.valueOf(GlobalAdmins.size()));
+        totalAdmins.getChildren().addAll(admLabel, adm);
+
+
+        Label buyLabel = new Label("Total Buyers:");
+        Label buy = new Label(String.valueOf(GlobalBuyers.size()));
+        totalBuyers.getChildren().addAll(buyLabel, buy);
+
+        Label sellLabel = new Label("Total Sellers:");
+        Label sell = new Label(String.valueOf(GlobalSellers.size()));
+        totalSellers.getChildren().addAll(sellLabel, sell);
+
+        sales.getStyleClass().add("title");
+        sold.getStyleClass().add("title");
+        adm.getStyleClass().add("title");
+        buy.getStyleClass().add("title");
+        sell.getStyleClass().add("title");
+
+
+        totalListed.getStyleClass().add("userCard");
+        totalSellers.getStyleClass().add("userCard");
+        totalBuyers.getStyleClass().add("userCard");
+        totalAdmins.getStyleClass().add("userCard");
+        totalSold.getStyleClass().add("userCard");
+        netSales.getStyleClass().add("userCard");
+
+
+
+        hbox1.getChildren().addAll(netSales, totalSold, totalListed );
+        hbox2.getChildren().addAll(  totalBuyers, totalSellers, totalAdmins);
+
+
+        final CategoryAxis x = new CategoryAxis();
+        final NumberAxis y = new NumberAxis();
+        x.setLabel("Month");
+        y.setLabel("Revenue");
+
+        final LineChart<String,Number> lineChart =
+                new LineChart<String,Number>(x,y);
+
+        lineChart.setTitle("Revenue Over Time");
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Gross Sales ($)");
+
+        series.getData().add(new XYChart.Data("Jan", 0));
+        series.getData().add(new XYChart.Data("Feb", 45.99));
+        series.getData().add(new XYChart.Data("Mar", 45.99));
+        series.getData().add(new XYChart.Data("Apr", 141.98));
+        series.getData().add(new XYChart.Data("May", 154.97));
+        series.getData().add(new XYChart.Data("Jun", 250.96));
+        series.getData().add(new XYChart.Data("Jul", 285.96));
+        series.getData().add(new XYChart.Data("Aug", 405.96));
+
+
+
+        lineChart.getData().add(series);
+
+        lineChart.setMinHeight(250);
+        hbox3.getChildren().add(lineChart);
+
+
+        dashboard.getChildren().addAll(hbox3, hbox1, hbox2);
+        hbox2.setAlignment(Pos.CENTER_RIGHT);
+        hbox1.setAlignment(Pos.CENTER_RIGHT);
+        parentBox.getChildren().addAll(titleLabel, dashboard);
+
+        this.getChildren().add(parentBox);
+        this.setAlignment(Pos.TOP_CENTER);
+        parentBox.setAlignment(Pos.TOP_CENTER);
+        titleLabel.setPadding(new Insets(30, 0, 0,0));
+
+        dashboard.setAlignment(Pos.CENTER);
+        dashboard.setPadding(new Insets(20));
+
+        hbox1.setPadding(new Insets(40));
+        hbox2.setPadding(new Insets(40));
+        hbox3.setPadding(new Insets(40));
+
+
+
+
+    }
 
 
 }

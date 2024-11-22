@@ -1,0 +1,4 @@
+Used - Like New: 0.85
+Good: 0.7
+Moderate: 0.6
+Poor: 0.5
