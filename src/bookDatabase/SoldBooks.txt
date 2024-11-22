@@ -34,3 +34,15 @@ Category: Natural Science
 Price: 120
 Condition: Used - Like New
 }
+{
+Title: Example 2
+Category: English Language
+Price: 45.99
+Condition: Used
+}
+{
+Title: Seller Test
+Category: Natural Science
+Price: 7.79
+Condition: Used
+}
