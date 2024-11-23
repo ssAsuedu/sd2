@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -40,6 +41,7 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.util.Callback;
 
 
 import java.awt.*;
@@ -260,65 +262,36 @@ public class BuyerPage extends HBox{ // extends Parent
             checkEmptyCart(books, vbox);
             return vbox;
         }
-        for (Book book: books){
-            HBox bookItem = new HBox(140);
-            VBox leftPane = new VBox(20);
-            VBox rightPane = new VBox(20);
+        final int ITEMS_PER_PAGE = 5;
+        int totalPages = (int) Math.ceil((double) books.size() / ITEMS_PER_PAGE);
 
 
-            Label title = new Label(book.getTitle());
-            Label condition = new Label(book.getCondition());
-            Label category = new Label(book.getCategory());
-            Label price = new Label("$" + book.getPrice().toString());
+        // Create Pagination control
+        Pagination pagination = new Pagination(totalPages);
+        pagination.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer pageIndex) {
+                VBox pageContent = new VBox(10);
 
 
-            leftPane.getChildren().addAll(title, condition, category);
-            Button addToCart = new Button("Add to Cart");
-            if (cart.contains(book)){
-                addToCart.setText("Added");
-                addToCart.getStyleClass().clear();
-                addToCart.setAlignment(Pos.CENTER);
-                addToCart.getStyleClass().add("added");
-            }
+                int startIndex = pageIndex * ITEMS_PER_PAGE;
+                int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, books.size());
 
 
-            addToCart.setOnAction(event -> {
-                cart.add(book);
-
-
-                System.out.printf("Cart Contains: %d\n", cart.size());
-                for (Book books2: cart){
-
-
-                    System.out.printf("%s\n", books2.getTitle());
+                // Add buyer information for current page
+                for (int i = startIndex; i < endIndex; i++) {
+                    Book book = books.get(i);
+                    HBox userItem = createBookItem(book);
+                    pageContent.getChildren().add(userItem);
                 }
-                addToCart.setText("Added");
-                addToCart.getStyleClass().clear();
-                addToCart.setAlignment(Pos.CENTER);
-                addToCart.getStyleClass().add("added");
-            });
-            addToCart.getStyleClass().add("addToCart");
-            addToCart.setAlignment(Pos.CENTER);
-            rightPane.getChildren().addAll(price, addToCart);
-//            rightPane.setPrefWidth(70);
-//            leftPane.setPrefWidth(70);
-            leftPane.setAlignment(Pos.CENTER_LEFT);
-            rightPane.setAlignment(Pos.CENTER_RIGHT);
-            rightPane.prefWidthProperty().bind(leftPane.prefWidthProperty());
-            bookItem.setAlignment(Pos.CENTER);
-            bookItem.getChildren().addAll(leftPane, rightPane);
-            bookItem.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            bookItem.setPadding(new Insets(10,0,10,0));
 
 
-            bookItem.getStyleClass().add("bookCard");
-            vbox.getChildren().add(bookItem);
-            vbox.setMargin(bookItem, new Insets(10, 0, 10, 0));
+                return pageContent;
+            }
+        });
+        vbox.getChildren().add(pagination);
 
 
-
-
-        }
         return vbox;
     };
 
@@ -514,5 +487,62 @@ public class BuyerPage extends HBox{ // extends Parent
     }
     public ObservableValue<? extends Number> getLoggedOut() {
         return loggedOut;
+    }
+
+    public HBox createBookItem(Book book){
+
+            HBox bookItem = new HBox(140);
+            VBox leftPane = new VBox(20);
+            VBox rightPane = new VBox(20);
+
+
+            Label title = new Label(book.getTitle());
+            Label condition = new Label(book.getCondition());
+            Label category = new Label(book.getCategory());
+            Label price = new Label("$" + book.getPrice().toString());
+
+
+            leftPane.getChildren().addAll(title, condition, category);
+            Button addToCart = new Button("Add to Cart");
+            if (cart.contains(book)){
+                addToCart.setText("Added");
+                addToCart.getStyleClass().clear();
+                addToCart.setAlignment(Pos.CENTER);
+                addToCart.getStyleClass().add("added");
+            }
+
+
+            addToCart.setOnAction(event -> {
+                cart.add(book);
+
+
+                System.out.printf("Cart Contains: %d\n", cart.size());
+                for (Book books2: cart){
+
+
+                    System.out.printf("%s\n", books2.getTitle());
+                }
+                addToCart.setText("Added");
+                addToCart.getStyleClass().clear();
+                addToCart.setAlignment(Pos.CENTER);
+                addToCart.getStyleClass().add("added");
+            });
+            addToCart.getStyleClass().add("addToCart");
+            addToCart.setAlignment(Pos.CENTER);
+            rightPane.getChildren().addAll(price, addToCart);
+//            rightPane.setPrefWidth(70);
+//            leftPane.setPrefWidth(70);
+            leftPane.setAlignment(Pos.CENTER_LEFT);
+            rightPane.setAlignment(Pos.CENTER_RIGHT);
+            rightPane.prefWidthProperty().bind(leftPane.prefWidthProperty());
+            bookItem.setAlignment(Pos.CENTER);
+            bookItem.getChildren().addAll(leftPane, rightPane);
+            bookItem.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            bookItem.setPadding(new Insets(10,0,10,0));
+
+
+            bookItem.getStyleClass().add("bookCard");
+
+            return bookItem;
     }
 };
